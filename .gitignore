@@ -1,0 +1,11 @@
+# tsdown
+/dist
+
+# Bun
+/node_modules
+
+# macOS
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo

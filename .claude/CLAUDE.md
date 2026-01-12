@@ -1,7 +1,3 @@
----
-paths: "**/*"
----
-
 # Output style Instructions
 
 - Always respond in Japanese
