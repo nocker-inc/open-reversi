@@ -1,0 +1,7 @@
+{
+  "enableAllProjectMcpServers": true,
+  "includeCoAuthoredBy": true,
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  }
+}
