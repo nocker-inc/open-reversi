@@ -3,6 +3,7 @@ import {
   ReversiErrorCannotPass,
   ReversiErrorCellOccupied,
   ReversiErrorGameOver,
+  ReversiErrorInvalidPosition,
   ReversiErrorNoFlip,
   ReversiErrorNoHistory,
 } from "@/errors"
@@ -55,6 +56,20 @@ test("ReversiErrorCannotPass has correct message", () => {
   expect(error.message).toContain("error[E004]")
   expect(error.message).toContain("Cannot pass when valid moves exist")
   expect(error.name).toBe("ReversiErrorCannotPass")
+})
+
+test("ReversiErrorInvalidPosition has correct message", () => {
+  const error = new ReversiErrorInvalidPosition("Z9")
+  expect(error.message).toContain("error[E006]")
+  expect(error.message).toContain("Invalid position")
+  expect(error.message).toContain("Z9")
+  expect(error.name).toBe("ReversiErrorInvalidPosition")
+  expect(error.input).toBe("Z9")
+})
+
+test("ReversiErrorInvalidPosition toPlain returns same message", () => {
+  const error = new ReversiErrorInvalidPosition("Z9")
+  expect(error.toPlain()).toBe(error.message)
 })
 
 test("ReversiErrorNoHistory has correct message", () => {

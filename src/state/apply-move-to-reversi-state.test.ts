@@ -67,6 +67,31 @@ test("returns error when game is over", () => {
   }
 })
 
+test("returns error for out-of-range position", () => {
+  const state = createReversiState()
+  const result = applyMoveToReversiState({
+    state,
+    position: { row: 99, col: 0 },
+  })
+  expect(result).toBeInstanceOf(Error)
+  if (result instanceof Error) {
+    expect(result.message).toContain("Invalid position")
+  }
+})
+
+test("returns frozen state", () => {
+  const state = createReversiState()
+  const result = applyMoveToReversiState({
+    state,
+    position: { row: 2, col: 3 },
+  })
+  expect(result).not.toBeInstanceOf(Error)
+  if (!(result instanceof Error)) {
+    expect(Object.isFrozen(result)).toBe(true)
+    expect(Object.isFrozen(result.board)).toBe(true)
+  }
+})
+
 test("original state is not modified", () => {
   const state = createReversiState()
   applyMoveToReversiState({ state, position: { row: 2, col: 3 } })

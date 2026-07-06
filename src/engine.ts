@@ -43,6 +43,10 @@ export class ReversiEngine {
     return this.validPlaces.map(toNotationFromReversiPosition)
   }
 
+  get isPassRequired(): boolean {
+    return !this.isGameOver && this.validPlaces.length === 0
+  }
+
   get history(): ReadonlyArray<ReversiEngine> {
     const result: ReversiEngine[] = []
     let current: ReversiEngine | undefined = this
@@ -55,6 +59,11 @@ export class ReversiEngine {
 
   place(input: ReversiPositionInput): ReversiEngine | ReversiError {
     const position = toPositionFromReversiInput(input)
+
+    if (position instanceof Error) {
+      return position
+    }
+
     const result = applyMoveToReversiState({
       state: this.toState(),
       position,

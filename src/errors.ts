@@ -177,6 +177,20 @@ export class ReversiErrorCannotPass extends Error {
   }
 }
 
+export class ReversiErrorInvalidPosition extends Error {
+  readonly input: string
+
+  constructor(input: string) {
+    super(`error[E006]: Invalid position: ${input}`)
+    this.name = "ReversiErrorInvalidPosition"
+    this.input = input
+  }
+
+  toPlain(): string {
+    return this.message
+  }
+}
+
 export class ReversiErrorNoHistory extends Error {
   constructor() {
     super("error[E005]: No previous state to undo")
@@ -193,4 +207,5 @@ export type ReversiError =
   | ReversiErrorCellOccupied
   | ReversiErrorNoFlip
   | ReversiErrorCannotPass
+  | ReversiErrorInvalidPosition
   | ReversiErrorNoHistory

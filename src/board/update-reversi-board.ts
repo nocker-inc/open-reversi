@@ -1,3 +1,4 @@
+import { freezeReversiBoard } from "@/board/freeze-reversi-board"
 import type { ReversiBoard, ReversiCell, ReversiPosition } from "@/types"
 
 type Props = {
@@ -7,13 +8,17 @@ type Props = {
 }
 
 export function updateReversiBoard(props: Props): ReversiBoard {
-  const positionSet = new Set(props.positions.map((p) => `${p.row},${p.col}`))
+  const positionSet = new Set(
+    props.positions.map((position) => `${position.row},${position.col}`),
+  )
 
-  return props.board.map((row, rowIndex) => {
+  const board = props.board.map((row, rowIndex) => {
     return row.map((currentCell, colIndex) => {
       return positionSet.has(`${rowIndex},${colIndex}`)
         ? props.cell
         : currentCell
     })
   })
+
+  return freezeReversiBoard(board)
 }

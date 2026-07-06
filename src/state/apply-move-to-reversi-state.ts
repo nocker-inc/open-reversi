@@ -4,13 +4,16 @@ import { updateReversiBoard } from "@/board/update-reversi-board"
 import {
   ReversiErrorCellOccupied,
   ReversiErrorGameOver,
+  ReversiErrorInvalidPosition,
   ReversiErrorNoFlip,
 } from "@/errors"
 import { toggleReversiPlayer } from "@/player/toggle-reversi-player"
+import { isValidReversiPosition } from "@/position/is-valid-reversi-position"
 import type { ReversiPosition, ReversiState } from "@/types"
 
 type ReversiPlaceError =
   | ReversiErrorGameOver
+  | ReversiErrorInvalidPosition
   | ReversiErrorCellOccupied
   | ReversiErrorNoFlip
 
@@ -24,6 +27,12 @@ export function applyMoveToReversiState(
 ): ReversiState | ReversiPlaceError {
   if (props.state.isGameOver) {
     return new ReversiErrorGameOver(props.state.board)
+  }
+
+  if (!isValidReversiPosition(props.position)) {
+    return new ReversiErrorInvalidPosition(
+      `(row: ${props.position.row}, col: ${props.position.col})`,
+    )
   }
 
   if (props.state.board[props.position.row][props.position.col] !== "empty") {
@@ -51,7 +60,11 @@ export function applyMoveToReversiState(
   const opponentMoves = toValidMovesFromReversiBoard(newBoard, opponent)
 
   if (opponentMoves.length > 0) {
-    return { board: newBoard, currentPlayer: opponent, isGameOver: false }
+    return Object.freeze({
+      board: newBoard,
+      currentPlayer: opponent,
+      isGameOver: false,
+    })
   }
 
   const currentPlayerMoves = toValidMovesFromReversiBoard(
@@ -59,13 +72,9 @@ export function applyMoveToReversiState(
     props.state.currentPlayer,
   )
 
-  if (currentPlayerMoves.length > 0) {
-    return {
-      board: newBoard,
-      currentPlayer: props.state.currentPlayer,
-      isGameOver: false,
-    }
-  }
-
-  return { board: newBoard, currentPlayer: opponent, isGameOver: true }
+  return Object.freeze({
+    board: newBoard,
+    currentPlayer: opponent,
+    isGameOver: currentPlayerMoves.length === 0,
+  })
 }

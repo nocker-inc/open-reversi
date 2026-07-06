@@ -80,6 +80,16 @@ game.validPlaces // [{ row: 2, col: 3 }, { row: 3, col: 2 }, ...]
 game.validPlacesNotation // ["D3", "C4", "F5", "E6"]
 ```
 
+### game.isPassRequired
+
+現在の手番にパスが必要かどうか。有効な手がなく、かつゲームが終了していない場合に `true`。
+
+```ts
+if (game.isPassRequired) {
+  const next = game.pass()
+}
+```
+
 ### game.history
 
 全状態の履歴。古い順に並んだ配列。
@@ -91,7 +101,9 @@ game.history.length // 手数 + 1
 
 ### game.place(input)
 
-駒を置く。標準表記 (`"D3"`) または `{ row, col }` 形式で指定。成功すると新しい `ReversiEngine` を返す。
+駒を置く。標準表記 (`"D3"`) または `{ row, col }` 形式で指定。成功すると新しい `ReversiEngine` を返す。不正な表記や盤面の範囲外の座標はエラーを返す。
+
+手を打つと手番は必ず相手に渡る。相手に有効な手がない場合は、相手が `pass()` を呼ぶ必要がある。
 
 ```ts
 const next = game.place("D3")
@@ -100,7 +112,7 @@ const next = game.place({ row: 2, col: 3 })
 
 ### game.pass()
 
-パスする。有効な手がない場合のみ可能。
+パスする。有効な手がない場合のみ可能。パスは自動処理されないため、`isPassRequired` を確認して明示的に呼び出す。
 
 ```ts
 const next = game.pass()
@@ -152,3 +164,12 @@ if (result instanceof Error) {
   console.log(result.toPlain())
 }
 ```
+
+| コード | クラス | 内容 |
+| --- | --- | --- |
+| E001 | `ReversiErrorGameOver` | ゲームが既に終了している |
+| E002 | `ReversiErrorCellOccupied` | セルが既に埋まっている |
+| E003 | `ReversiErrorNoFlip` | ひっくり返せる駒がない |
+| E004 | `ReversiErrorCannotPass` | 有効な手があるのにパスした |
+| E005 | `ReversiErrorNoHistory` | undoする履歴がない |
+| E006 | `ReversiErrorInvalidPosition` | 不正な表記または範囲外の座標 |

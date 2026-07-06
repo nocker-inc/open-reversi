@@ -25,7 +25,8 @@ UIを持たないヘッドレスリバーシエンジン。イミュータブル
 ## Architecture
 
 - 1ファイル1関数/クラス
-- イミュータブル設計 (Object.freeze)
+- イミュータブル設計 (Object.freeze、board/stateはdeep freeze)
 - 関数コア + クラスファサードパターン
 - エラーはthrowせずT | Errorを返却
 - propsオブジェクトパターン (引数3つ以上の場合)
+- 明示パス方式 (手を打つと手番は必ず相手に渡る。パスは自動処理せず、`isPassRequired` を確認して `pass()` を呼ぶ)

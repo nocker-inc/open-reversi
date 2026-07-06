@@ -10,6 +10,13 @@ test("creates initial state with 4 pieces", () => {
   expect(toCountFromReversiBoard(state.board, "white")).toBe(2)
 })
 
+test("returns frozen state and board", () => {
+  const state = createReversiState()
+  expect(Object.isFrozen(state)).toBe(true)
+  expect(Object.isFrozen(state.board)).toBe(true)
+  expect(Object.isFrozen(state.board[0])).toBe(true)
+})
+
 test("returns correct cell value", () => {
   const state = createReversiState()
   expect(state.board[3][3]).toBe("white")

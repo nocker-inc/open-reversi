@@ -30,17 +30,9 @@ export function applyPassToReversiState(
     opponent,
   )
 
-  if (opponentMoves.length === 0) {
-    return {
-      board: props.state.board,
-      currentPlayer: opponent,
-      isGameOver: true,
-    }
-  }
-
-  return {
+  return Object.freeze({
     board: props.state.board,
     currentPlayer: opponent,
-    isGameOver: false,
-  }
+    isGameOver: opponentMoves.length === 0,
+  })
 }
